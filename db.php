@@ -1,12 +1,15 @@
 <?php
-if (!file_exists(__DIR__ . '/config.php')) {
-    die("Missing config.php — copy config.sample.php to config.php and edit DB credentials.");
-}
-$config = include __DIR__ . '/config.php';
+// Database configuration
+$host = "localhost";       // XAMPP runs MySQL on localhost
+$user = "root";            // Default XAMPP MySQL username
+$pass = "";                // Default password is empty
+$dbname = "student_system"; // Database name from phpMyAdmin
 
-$conn = new mysqli($config['DB_HOST'], $config['DB_USER'], $config['DB_PASS'], $config['DB_NAME']);
+// Create connection
+$conn = new mysqli($host, $user, $pass, $dbname);
+
+// Check connection
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    die("Database connection failed: " . $conn->connect_error);
 }
-$conn->set_charset('utf8mb4');
 ?>
