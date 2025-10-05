@@ -1,20 +1,71 @@
 <?php
 session_start();
 include 'db.php';
-if ($_SESSION['role'] != 'admin') {
-    header("Location: index.php");
-    exit;
+
+if (!isset($_GET['id']) || empty($_GET['id'])) {
+    die("No student ID provided!");
 }
 
 $id = $_GET['id'];
-$result = $conn->query("SELECT * FROM students WHERE id = $id");
+
+// Fetch existing student data
+$result = $conn->query("SELECT * FROM students WHERE id = '$id'");
+if ($result->num_rows == 0) {
+    die("Student not found!");
+}
+
 $student = $result->fetch_assoc();
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $student_id = $_POST['student_id'];
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    $course = $_POST['course'];
-    $phone = $_POST['phone'];
+if (isset($_POST['update'])) {
+    $student_id = trim($_POST['student_id']);
+    $name = trim($_POST['name']);
+    $email = trim($_POST['email']);
+    $course = trim($_POST['course']);
+    $phone = trim($_POST['phone']);
 
-    $stmt = $conn->prepare("UPDATE students SET student_id=?, name=?, email=?, course=?, phone=?
+    // Update student record
+    $update = $conn->query("UPDATE students 
+        SET student_id='$student_id', name='$name', email='$email', course='$course', phone='$phone'
+        WHERE id='$id'");
+
+    if ($update) {
+        $_SESSION['msg'] = "Student record updated successfully!";
+        header("Location: index.php");
+        exit();
+    } else {
+        echo "Error: " . $conn->error;
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Student</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="container">
+    <h2>Edit Student Record</h2>
+    <form method="POST">
+        <label>Student ID:</label>
+        <input type="text" name="student_id" value="<?= $student['student_id'] ?>" required><br>
+
+        <label>Name:</label>
+        <input type="text" name="name" value="<?= $student['name'] ?>" required><br>
+
+        <label>Email:</label>
+        <input type="email" name="email" value="<?= $student['email'] ?>" required><br>
+
+        <label>Course:</label>
+        <input type="text" name="course" value="<?= $student['course'] ?>" required><br>
+
+        <label>Phone:</label>
+        <input type="text" name="phone" value="<?= $student['phone'] ?>" required><br>
+
+        <button type="submit" name="update">Update</button>
+        <a href="index.php" class="cancel-btn">Cancel</a>
+    </form>
+</div>
+</body>
+</html>
