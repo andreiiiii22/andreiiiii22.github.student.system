@@ -47,76 +47,73 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     body {
         margin: 0;
         height: 100vh;
-        background: linear-gradient(135deg, #4CAF50, #2e7d32);
+        background-color: #f4f6f8;
         display: flex;
         justify-content: center;
         align-items: center;
         color: #333;
+    }
+
+    .login-card {
+        background: #fff;
+        width: 380px;
+        padding: 40px;
+        border-radius: 14px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+        text-align: center;
         animation: fadeIn 0.6s ease;
     }
+
     @keyframes fadeIn {
-        from { opacity: 0; transform: scale(0.95); }
-        to { opacity: 1; transform: scale(1); }
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 
-    .login-container {
-        background-color: #fff;
-        padding: 40px;
-        border-radius: 16px;
-        box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-        width: 360px;
-        text-align: center;
-    }
-
-    .login-container h2 {
-        margin-bottom: 10px;
+    h2 {
         color: #2e7d32;
+        margin-bottom: 8px;
     }
 
-    .login-container p {
-        color: #666;
-        font-size: 14px;
+    p.subtitle {
+        color: #777;
         margin-bottom: 25px;
-    }
-
-    .form-group {
-        text-align: left;
-        margin-bottom: 15px;
+        font-size: 14px;
     }
 
     label {
         display: block;
+        text-align: left;
         font-weight: 600;
-        color: #333;
-        margin-bottom: 6px;
+        margin: 10px 0 5px;
     }
 
     input {
         width: 100%;
         padding: 10px;
-        border: 1px solid #bbb;
+        border: 1px solid #ccc;
         border-radius: 6px;
         font-size: 15px;
-        outline: none;
         transition: 0.3s;
+        outline: none;
     }
 
     input:focus {
         border-color: #4CAF50;
-        box-shadow: 0 0 5px rgba(76, 175, 80, 0.4);
+        box-shadow: 0 0 5px rgba(76,175,80,0.2);
     }
 
     button {
         width: 100%;
+        margin-top: 15px;
         padding: 10px;
+        border: none;
         background-color: #4CAF50;
         color: white;
         font-size: 16px;
-        border: none;
+        font-weight: 600;
         border-radius: 6px;
         cursor: pointer;
-        transition: 0.3s;
-        margin-top: 10px;
+        transition: background-color 0.3s;
     }
 
     button:hover {
@@ -124,12 +121,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     .error {
-        background: #ffebee;
+        background-color: #ffebee;
         color: #c62828;
         padding: 10px;
         border-radius: 6px;
-        margin-bottom: 15px;
         font-weight: bold;
+        margin-bottom: 10px;
+        text-align: left;
     }
 
     .footer {
@@ -141,32 +139,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     .footer a {
         color: #2e7d32;
         text-decoration: none;
-        font-weight: bold;
+        font-weight: 600;
     }
 
     .footer a:hover {
         text-decoration: underline;
     }
+
 </style>
 </head>
 <body>
 
-<div class="login-container">
-    <h2>Student Record System</h2>
-    <p>Login to manage or view student data</p>
+<div class="login-card">
+    <h2>Student System</h2>
+    <p class="subtitle">Sign in to continue</p>
 
     <?= $msg ?>
 
     <form method="POST">
-        <div class="form-group">
-            <label>Username</label>
-            <input type="text" name="username" placeholder="Enter your username" required>
-        </div>
+        <label>Username</label>
+        <input type="text" name="username" placeholder="Enter username" required>
 
-        <div class="form-group">
-            <label>Password</label>
-            <input type="password" name="password" placeholder="Enter your password" required>
-        </div>
+        <label>Password</label>
+        <input type="password" name="password" placeholder="Enter password" required>
 
         <button type="submit">Login</button>
     </form>
@@ -178,3 +173,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 </body>
 </html>
+
