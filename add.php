@@ -8,7 +8,9 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 
+$username = $_SESSION['username'];
 $msg = "";
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $student_id = trim($_POST['student_id']);
     $name = trim($_POST['name']);
@@ -46,6 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             background-color: #f5f7fa;
             display: flex;
         }
+        /* Sidebar */
         .sidebar {
             width: 220px;
             background: #2e7d32;
@@ -71,18 +74,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             background-color: #388e3c;
         }
 
+        /* Main layout */
         .main-content {
             margin-left: 240px;
-            padding: 30px;
-            flex: 1;
+            width: 100%;
         }
-        .header {
+
+        /* Top Navbar */
+        .navbar {
+            background: white;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 15px 25px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
-        .header h2 {
+        .navbar h2 {
             margin: 0;
+            color: #2e7d32;
+        }
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .clock {
+            font-weight: bold;
+            color: #333;
         }
         .logout-btn {
             background-color: #f44336;
@@ -91,13 +112,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border-radius: 5px;
             text-decoration: none;
         }
+
+        /* Form */
         .form-container {
             background: white;
             padding: 25px;
             border-radius: 12px;
             box-shadow: 0 3px 10px rgba(0,0,0,0.1);
             width: 400px;
-            margin-top: 40px;
+            margin: 40px auto;
             animation: fadeIn 0.6s ease;
         }
         @keyframes fadeIn {
@@ -145,6 +168,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
 
+<!-- Sidebar -->
 <div class="sidebar">
     <h2>Dashboard</h2>
     <a href="index.php">🏠 Home</a>
@@ -153,9 +177,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <a href="logout.php" class="logout-btn" style="margin-top:20px;">🚪 Logout</a>
 </div>
 
+<!-- Main Content -->
 <div class="main-content">
-    <div class="header">
-        <h2>Add a New Student</h2>
+    <div class="navbar">
+        <h2>Add Student</h2>
+        <div class="navbar-right">
+            <span>👋 Welcome, <b><?= htmlspecialchars($username) ?></b></span>
+            <span class="clock" id="clock"></span>
+        </div>
     </div>
 
     <div class="form-container">
@@ -180,6 +209,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </form>
     </div>
 </div>
+
+<script>
+// Live Digital Clock
+function updateClock() {
+    const now = new Date();
+    let hours = now.getHours().toString().padStart(2, '0');
+    let minutes = now.getMinutes().toString().padStart(2, '0');
+    let seconds = now.getSeconds().toString().padStart(2, '0');
+    document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
+}
+setInterval(updateClock, 1000);
+updateClock();
+</script>
 
 </body>
 </html>
