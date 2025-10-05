@@ -11,7 +11,7 @@ if (!isset($_SESSION['username'])) {
 $role = $_SESSION['role'];
 $search = "";
 
-if (isset($_GET['search'])) {
+if (isset($_GET['search']) && !empty($_GET['search'])) {
     $search = trim($_GET['search']);
     $query = "SELECT * FROM students WHERE 
               student_id LIKE '%$search%' OR 
@@ -29,7 +29,6 @@ $result = $conn->query($query);
 <head>
     <meta charset="UTF-8">
     <title>Student Records</title>
-    <link rel="stylesheet" href="css/style.css">
     <style>
         * {
             box-sizing: border-box;
@@ -37,16 +36,16 @@ $result = $conn->query($query);
         }
         body {
             margin: 0;
-            background-color: #f5f8f4;
+            background-color: #f7faf7;
             color: #333;
         }
         .container {
             max-width: 1100px;
             margin: 50px auto;
-            background: #fff;
-            border-radius: 10px;
+            background: #ffffff;
+            border-radius: 12px;
             padding: 30px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         }
         .header {
             display: flex;
@@ -58,21 +57,23 @@ $result = $conn->query($query);
         .header h2 {
             color: #2e7d32;
             margin: 0;
+            font-size: 26px;
         }
         .logout-btn {
-            background-color: #4CAF50;
+            background-color: #e53935;
             border: none;
             padding: 8px 15px;
             border-radius: 6px;
             color: white;
             text-decoration: none;
             transition: background 0.3s;
+            font-weight: 500;
         }
         .logout-btn:hover {
-            background-color: #43a047;
+            background-color: #c62828;
         }
         .top-actions {
-            margin-top: 20px;
+            margin-top: 25px;
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
@@ -80,17 +81,17 @@ $result = $conn->query($query);
         .add-btn, .export-btn {
             background-color: #43a047;
             color: white;
-            padding: 8px 14px;
-            text-decoration: none;
+            padding: 10px 18px;
             border-radius: 6px;
+            text-decoration: none;
             font-weight: 500;
-            transition: background 0.3s;
+            transition: 0.3s;
         }
         .add-btn:hover, .export-btn:hover {
-            background-color: #388e3c;
+            background-color: #2e7d32;
         }
         .search-bar {
-            margin-top: 20px;
+            margin-top: 25px;
             display: flex;
             gap: 10px;
         }
@@ -100,9 +101,14 @@ $result = $conn->query($query);
             border: 1px solid #ccc;
             border-radius: 6px;
             outline: none;
+            transition: 0.2s;
+        }
+        .search-bar input:focus {
+            border-color: #4CAF50;
+            box-shadow: 0 0 5px rgba(76,175,80,0.3);
         }
         .search-bar button {
-            background-color: #4CAF50;
+            background-color: #43a047;
             color: white;
             border: none;
             padding: 10px 18px;
@@ -111,7 +117,7 @@ $result = $conn->query($query);
             font-weight: 500;
         }
         .search-bar button:hover {
-            background-color: #43a047;
+            background-color: #2e7d32;
         }
         table {
             width: 100%;
@@ -130,18 +136,22 @@ $result = $conn->query($query);
         tr:nth-child(even) {
             background-color: #f9f9f9;
         }
+        tr:hover {
+            background-color: #f1f8f1;
+        }
         .action-btn {
             padding: 6px 12px;
             border-radius: 5px;
             text-decoration: none;
             color: white;
             font-size: 14px;
+            transition: 0.2s;
         }
         .edit-btn {
             background-color: #43a047;
         }
         .edit-btn:hover {
-            background-color: #388e3c;
+            background-color: #2e7d32;
         }
         .delete-btn {
             background-color: #e53935;
