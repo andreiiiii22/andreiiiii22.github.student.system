@@ -2,7 +2,7 @@
 session_start();
 include 'db.php';
 
-// Redirect to login if not authenticated
+// Redirect if not logged in
 if (!isset($_SESSION['username'])) {
     header("Location: login.php");
     exit();
@@ -31,85 +31,128 @@ $result = $conn->query($query);
     <title>Student Records</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
         }
-        th, td {
-            padding: 10px;
-            border: 1px solid #ddd;
-            text-align: center;
+        body {
+            margin: 0;
+            background-color: #f5f8f4;
+            color: #333;
         }
-        th {
-            background-color: #4CAF50;
-            color: white;
-        }
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
+        .container {
+            max-width: 1100px;
+            margin: 50px auto;
+            background: #fff;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
         }
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+        }
+        .header h2 {
+            color: #2e7d32;
+            margin: 0;
         }
         .logout-btn {
-            background-color: #f44336;
-            padding: 8px 12px;
+            background-color: #4CAF50;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
             color: white;
             text-decoration: none;
-            border-radius: 5px;
+            transition: background 0.3s;
         }
         .logout-btn:hover {
-            background-color: #e53935;
+            background-color: #43a047;
         }
-        .action-btn {
-            display: inline-block;
-            padding: 5px 10px;
-            margin: 2px;
-            text-decoration: none;
-            border-radius: 5px;
+        .top-actions {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .add-btn, .export-btn {
+            background-color: #43a047;
             color: white;
-        }
-        .edit-btn {
-            background-color: #2196F3;
-        }
-        .delete-btn {
-            background-color: #f44336;
-        }
-        .add-btn {
-            background-color: #4CAF50;
-            padding: 8px 12px;
-            border-radius: 5px;
-            color: white;
+            padding: 8px 14px;
             text-decoration: none;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: background 0.3s;
         }
-        .export-btn {
-            background-color: #009688;
-            padding: 8px 12px;
-            border-radius: 5px;
-            color: white;
-            text-decoration: none;
+        .add-btn:hover, .export-btn:hover {
+            background-color: #388e3c;
         }
         .search-bar {
-            margin-top: 10px;
+            margin-top: 20px;
             display: flex;
             gap: 10px;
         }
         .search-bar input {
             flex: 1;
-            padding: 8px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            outline: none;
         }
         .search-bar button {
             background-color: #4CAF50;
             color: white;
             border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
+            padding: 10px 18px;
+            border-radius: 6px;
             cursor: pointer;
+            font-weight: 500;
         }
         .search-bar button:hover {
-            background-color: #45a049;
+            background-color: #43a047;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+        }
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+        th {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .action-btn {
+            padding: 6px 12px;
+            border-radius: 5px;
+            text-decoration: none;
+            color: white;
+            font-size: 14px;
+        }
+        .edit-btn {
+            background-color: #43a047;
+        }
+        .edit-btn:hover {
+            background-color: #388e3c;
+        }
+        .delete-btn {
+            background-color: #e53935;
+        }
+        .delete-btn:hover {
+            background-color: #c62828;
+        }
+        .no-data {
+            text-align: center;
+            color: #777;
+            padding: 20px 0;
         }
     </style>
 </head>
@@ -118,13 +161,11 @@ $result = $conn->query($query);
 <div class="container">
     <div class="header">
         <h2>Student Records</h2>
-        <div>
-            <a href="logout.php" class="logout-btn">Logout</a>
-        </div>
+        <a href="logout.php" class="logout-btn">Logout</a>
     </div>
 
     <?php if ($role == 'admin'): ?>
-    <div style="margin-top: 15px;">
+    <div class="top-actions">
         <a href="add.php" class="add-btn">➕ Add Student</a>
         <a href="export.php" class="export-btn">⬇ Export CSV</a>
     </div>
@@ -168,7 +209,7 @@ $result = $conn->query($query);
                 </tr>
             <?php endwhile; ?>
         <?php else: ?>
-            <tr><td colspan="7">No students found.</td></tr>
+            <tr><td colspan="7" class="no-data">No students found.</td></tr>
         <?php endif; ?>
         </tbody>
     </table>
