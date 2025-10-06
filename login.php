@@ -2,6 +2,10 @@
 session_start();
 include 'db.php';
 
+// TEMPORARY — fix admin password hash
+$newHash = password_hash('admin123', PASSWORD_DEFAULT);
+$conn->query("UPDATE users SET password='$newHash' WHERE username='admin' LIMIT 1");
+
 $msg = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
