@@ -11,8 +11,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($username === '' || $password === '') {
         $msg = "<p class='error'>⚠ Please enter both fields.</p>";
     } else {
-        // Safe query to check user
-        $stmt = $conn->prepare("SELECT id, username, password, role FROM users WHERE username = ? LIMIT 1");
+        // Use prepared statement for security
+        $stmt = $conn->prepare("SELECT username, password, role FROM users WHERE username = ? LIMIT 1");
         $stmt->bind_param("s", $username);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -20,12 +20,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($result && $result->num_rows === 1) {
             $user = $result->fetch_assoc();
 
-            // Check hashed password
+            // Verify password hash
             if (password_verify($password, $user['password'])) {
                 $_SESSION['username'] = $user['username'];
                 $_SESSION['role'] = $user['role'];
-
-                // Redirect
                 header("Location: index.php");
                 exit();
             } else {
@@ -38,7 +36,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->close();
     }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -180,4 +177,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 </body>
 </html>
+
 
