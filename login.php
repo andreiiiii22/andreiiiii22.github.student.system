@@ -5,20 +5,27 @@ include 'db.php';
 $msg = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = trim($_POST['username']);
-    $password = trim($_POST['password']);
+    $username = isset($_POST['username']) ? trim($_POST['username']) : '';
+    $password = isset($_POST['password']) ? trim($_POST['password']) : '';
 
-    if ($username && $password) {
-        $stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");
+    if ($username === '' || $password === '') {
+        $msg = "<p class='error'>⚠ Please enter both fields.</p>";
+    } else {
+        // Safe query to check user
+        $stmt = $conn->prepare("SELECT id, username, password, role FROM users WHERE username = ? LIMIT 1");
         $stmt->bind_param("s", $username);
         $stmt->execute();
         $result = $stmt->get_result();
 
-        if ($result->num_rows === 1) {
+        if ($result && $result->num_rows === 1) {
             $user = $result->fetch_assoc();
+
+            // Check hashed password
             if (password_verify($password, $user['password'])) {
                 $_SESSION['username'] = $user['username'];
                 $_SESSION['role'] = $user['role'];
+
+                // Redirect
                 header("Location: index.php");
                 exit();
             } else {
@@ -27,11 +34,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $msg = "<p class='error'>⚠ User not found.</p>";
         }
+
         $stmt->close();
-    } else {
-        $msg = "<p class='error'>⚠ Please enter both fields.</p>";
     }
 }
+
 ?>
 
 <!DOCTYPE html>
