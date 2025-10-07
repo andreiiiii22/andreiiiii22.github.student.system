@@ -48,6 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             background-color: #f5f7fa;
             display: flex;
         }
+
         /* Sidebar */
         .sidebar {
             width: 220px;
@@ -77,7 +78,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         /* Main layout */
         .main-content {
             margin-left: 240px;
-            width: 100%;
+            width: calc(100% - 240px);
+            min-height: 100vh;
         }
 
         /* Top Navbar */
@@ -113,33 +115,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             text-decoration: none;
         }
 
-        /* Form */
+        /* Clean Form */
         .form-container {
             background: white;
+            border: 2px solid #4CAF50; /* ✅ fixed clean border */
             padding: 25px;
             border-radius: 12px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            width: 400px;
-            margin: 40px auto;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            width: 420px;
+            margin: 50px auto;
             animation: fadeIn 0.6s ease;
         }
+
         @keyframes fadeIn {
             from {opacity: 0; transform: translateY(-10px);}
             to {opacity: 1; transform: translateY(0);}
         }
+
         label {
             display: block;
             margin: 10px 0 5px;
             color: #333;
             font-weight: 600;
         }
+
         input {
             width: 100%;
             padding: 10px;
             border: 1px solid #bbb;
             border-radius: 6px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            transition: border-color 0.2s;
         }
+
+        input:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
         button {
             background-color: #4CAF50;
             border: none;
@@ -149,11 +162,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-size: 16px;
             border-radius: 6px;
             cursor: pointer;
-            transition: 0.3s;
+            transition: background-color 0.3s;
         }
+
         button:hover {
             background-color: #45a049;
         }
+
         .success {
             color: green;
             font-weight: bold;
@@ -211,13 +226,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </div>
 
 <script>
-// Live Digital Clock
 function updateClock() {
     const now = new Date();
-    let hours = now.getHours().toString().padStart(2, '0');
-    let minutes = now.getMinutes().toString().padStart(2, '0');
-    let seconds = now.getSeconds().toString().padStart(2, '0');
-    document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
+    document.getElementById('clock').textContent = now.toLocaleTimeString();
 }
 setInterval(updateClock, 1000);
 updateClock();
@@ -225,3 +236,5 @@ updateClock();
 
 </body>
 </html>
+
+           
